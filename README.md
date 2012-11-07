@@ -1,7 +1,4 @@
 
 
-
 ## Dependencies:
 
-
-* sqlite3
