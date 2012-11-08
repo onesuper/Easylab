@@ -1,86 +1,101 @@
 #!/usr/bin/python
 # Filename: easylab_db.py
 
-db_name = "easylab.db"
+
+"""
+NOTE:
+
+"""
+
 
 import sqlite3
+import os
+
+class EasylabDB():
+
+    def __init__(self):
+        dbpath = os.environ["HOME"] + "/.esaylab"
+        self.conn = sqlite3.connect(dbpath)
 
 
-def insertOrCreateTable(conn, tablename, data):
-    createTable(conn, tablename, data)
-    insertDict(conn, tablename, data)
-    
+    def __del__(self):
+        self.conn.close()
 
-def insertDict(conn, tablename, data):
-    try:
-        cursor = conn.cursor()
-    	fields = data.keys()
-    	values = data.values()
-    	placeholder = "?"
-    	fieldlist = ",".join(fields)
-    	placeholderlist = ",".join([placeholder]*len(fields))
-    	query = "INSERT INTO %s(%s) values (%s)" % (tablename, fieldlist,
+
+    def insertOrCreateTable(self, table, data):
+        self.createTable(table, data)
+        self.insertDict(table, data)
+
+
+    def insertDict(self, table, data):
+        try:
+            cursor = self.conn.cursor()
+            fields = data.keys()
+            values = data.values()
+            placeholder = "?"
+            fieldlist = ",".join(fields)
+            placeholderlist = ",".join([placeholder]*len(fields))
+            query = "INSERT INTO %s(%s) values (%s)" % (table, fieldlist,
                                                 placeholderlist)
-        cursor.execute(query, values)
-        conn.commit()
-    except sqlite3.OperationalError, e:
-        print e
+            cursor.execute(query, values)
+            self.conn.commit()
+        except sqlite3.OperationalError, e:
+            print e
         
 
-def showTable(conn, tablename):
-    try:
-        # show colum names
-        cursor = conn.cursor()
-        query = "PRAGMA table_info([%s])" % tablename
-        cursor.execute(query)
-        fieldlist =  cursor.fetchall()
-        if len(fieldlist) > 0:
-            for t in fieldlist:
-                 print str(t[1]) + "\t|",
-            print "\n", 
+    def showTable(self, table):
+        try:
+            # show colum names
+            cursor = self.conn.cursor()
+            query = "PRAGMA table_info([%s])" % table
+            cursor.execute(query)
+            fieldlist =  cursor.fetchall()
+            if len(fieldlist) > 0:
+                for t in fieldlist:
+                    print str(t[1]) + "\t|",
+                print "\n", 
 
-        # show the values
-        query = "SELECT * FROM %s" % tablename
-        cursor.execute(query)
-        result = cursor.fetchall()
-        printfResult(result)
+            # show the values
+            query = "SELECT * FROM %s" % table
+            cursor.execute(query)
+            result = cursor.fetchall()
+            printfResult(result)
+        except sqlite3.OperationalError, e:
+            print e
 
-    except sqlite3.OperationalError, e:
-        print e
 
-def createTable(conn, tablename, data):
-    try:
-    	cursor = conn.cursor()
-    	fields = data.keys()
-    	fieldlist = ",".join(fields)
-    	query = "CREATE TABLE IF NOT EXISTS %s(%s)" % (tablename, fieldlist)
-    	cursor.execute(query)
-    	conn.commit()
-    except sqlite3.OperationalError, e:
-        print e
+    def createTable(self, table, data):
+        try:
+            cursor = self.conn.cursor()
+            fields = data.keys()
+            fieldlist = ",".join(fields)
+            query = "CREATE TABLE IF NOT EXISTS %s(%s)" % (table, fieldlist)
+            cursor.execute(query)
+            self.conn.commit()
+        except sqlite3.OperationalError, e:
+            print e
         
-def createConn():
-    return sqlite3.connect(db_name)
+
+    def dropTable(self, table):
+        try:
+            cursor = self.conn.cursor()
+            query = "DROP TABLE %s" % table
+            cursor.execute(query)
+            self.conn.commit()
+        except sqlite3.OperationalError, e:
+            print e
 
 
-def dropTable(conn, tablename):
-    try:
-        cursor = conn.cursor()
-        query = "DROP TABLE %s" % tablename
-        cursor.execute(query)
-        conn.commit()
-    except sqlite3.OperationalError, e:
-        print e
+    def query(self, query):
+        try:
+            cursor = self.conn.cursor()
+            cursor.execute(query)
+            result = cursor.fetchall()
+            return result
+        except sqlite3.OperationalError, e:
+            print e
 
-
-def query(conn, query):
-     try:
-         cursor = conn.cursor()
-         cursor.execute(query)
-         result = cursor.fetchall()
-         printfResult(result)
-     except sqlite3.OperationalError, e:
-         print e
+    
 
 
 def printfResult(result):

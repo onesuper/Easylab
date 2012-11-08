@@ -6,16 +6,19 @@ version = '0.1'
 
 
 import time
-import easylab_db as db
 import sys
+import os
+
+import easylab_db as db
 
 
 class Easylab():
-    def __init__(self):
+
+    def __init__(self, name):
+        self.name = name
         self.timeFactor = 1000
-        self.timeMeassurement = "ms"
-        self.conn = db.createConn()
-        self.tablename = sys.argv[0][0:sys.argv[0].find(".")]
+        self.timeMeassure = "ms"
+        self.database = db.EasylabDB()
 
     def start(self):
         self.start = time.time()
@@ -28,14 +31,9 @@ class Easylab():
         return self.elapsedTime
     
     def timeStr(self):
-        return "%.3f%s" % (self.elapsedTime , self.timeMeassurement)
+        return "%.3f%s" % (self.elapsedTime , self.timeMeassure)
 
-    def save(self, **attr):
-        db.insertOrCreateTable(self.conn, self.tablename, attr)
+    def log(self, **attr):
+        self.database.insertOrCreateTable(self.name, attr)
         
-    def __del__(self):
-        self.conn.close
-        
-
-
 
