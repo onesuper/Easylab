@@ -89,6 +89,8 @@ Type "help" for more information.'''
 
     def do_plot(self, sql):
         fromIndex = sql.find("from") # -1 = not found
+
+        #get the column names
         argstr = sql[0:fromIndex].strip()
         arglist = argstr.split(",")
         if len(arglist) != 2:
@@ -96,12 +98,47 @@ Type "help" for more information.'''
             return
         namelist = [arg.strip() for arg in arglist]
 
+        #get the table name
+        table = sql[fromIndex:].strip().replace("from", "")
+
         # query the result
         sql = "select " + sql
         result = self.database.query(sql)
         
         # plot it!
-        self.plot.plot(result, namelist)
+        self.plot.plot(result, namelist, table)
+
+
+    def do_plots(self, sql):
+        fromIndex = sql.find("from") # -1 = not found
+        argstr = sql[0:fromIndex].strip()
+        arglist = argstr.split(",")
+        if len(arglist) <= 2:
+            print "plots command accept more than two columns"
+            return
+        """
+        argstr looks like:
+        fib2.N, fib1.time ,fib2.time fib3.time
+        so, N is the xlabel
+            time is the ylabel
+            fib1, fib2, fib3 are the line labels
+        """
+        dotIndex = arglist[0].find(".")
+        xlabel = arglist[0][dotIndex+1:].strip()
+        dotIndex = arglist[1].find(".")
+        ylabel = arglist[1][dotIndex+1:].strip()
+        namelist = []
+        for i in range(1, len(arglist)):
+            dotIndex = arglist[i].find(".")
+            name = arglist[i][0: dotIndex]
+            namelist.append(name.strip())
+    
+        # query the result
+        sql = "select " + sql
+        result = self.database.query(sql)
+
+        # pass the result to plot
+        self.plot.plots(result, xlabel, ylabel, namelist)
 
 
     def do_compare(self, sql):

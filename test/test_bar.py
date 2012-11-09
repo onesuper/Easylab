@@ -3,6 +3,7 @@
 
 import sys
 sys.path.append("..")
+sys.path.append(".")
 import easylab_plot as plt
 
 

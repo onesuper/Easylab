@@ -102,6 +102,8 @@ class EasylabDB():
 
 
 def printfResult(result):
+    if not result:
+        return
     for row in result:
         for col in row:
             print str(col) + "\t|",
