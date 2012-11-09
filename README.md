@@ -3,7 +3,7 @@
 0.1.0
 
 
-Easylab is a simple, convenient tool to make the 'lab' easier. It captures the results and the arguments of a program, stores them in a database, and visualizes them with a simple, SQL-style query.
+Easylab is a simple, convenient tool to make the 'lab' easier. It captures the results as well as the arguments of a program, stores them in a database, and visualizes them with a simple, SQL-style query.
 
 
 
@@ -18,7 +18,7 @@ Easylab is a simple, convenient tool to make the 'lab' easier. It captures the r
     e.log(var1=var1, var2=var2, var3=var3)
 
 
-2\. Fire up the Easylab Concole:
+2\. Fire up the console:
 
     >python easylab_console.py
     =============================================

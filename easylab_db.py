@@ -21,6 +21,9 @@ class EasylabDB():
     def __del__(self):
         self.conn.close()
 
+    def showTables(self):
+        return self.query("SELECT NAME FROM sqlite_master WHERE type='table' ORDER BY name;")
+
 
     def insertOrCreateTable(self, table, data):
         self.createTable(table, data)

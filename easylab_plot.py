@@ -23,7 +23,7 @@ class EasylabPlot():
         self.ylabel = ""
 
 
-    def comparePlot(self, result, namelist):
+    def bar(self, result, namelist):
         
         if not result:
             return
@@ -43,7 +43,7 @@ class EasylabPlot():
         data = [tuple(l) for l in data]
 
         ind = np.arange(N)
-        width = 1 / (M * 2.73)
+        width = 1 / (M / 0.618)
         fig = plt.figure()
         ax = fig.add_subplot(111)
     
@@ -60,3 +60,21 @@ class EasylabPlot():
         ax.legend(handles, labels, loc=0)
         plt.show()
     
+
+    def plot(self, result, namelist):
+        if not result:
+            return
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        ax.set_xlabel(namelist[0])
+        ax.set_ylabel(namelist[1])
+        ax.grid(True)
+
+        X = []
+        Y = []
+        for r in result:
+            X.append(r[0])
+            Y.append(r[1])
+        
+        ax.plot(X, Y, "o-")
+        plt.show()

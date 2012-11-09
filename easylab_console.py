@@ -34,6 +34,13 @@ Type "help" for more information.'''
         return
     
 
+    def do_ls(self, path):
+        result = self.database.showTables()
+        for r in result:
+            print r[0] + '\t',
+        print "\n",
+
+
     def do_run(self, argvstr):
         argv = argvstr.split()
         try:
@@ -80,6 +87,23 @@ Type "help" for more information.'''
         db.printfResult(result)
 
 
+    def do_plot(self, sql):
+        fromIndex = sql.find("from") # -1 = not found
+        argstr = sql[0:fromIndex].strip()
+        arglist = argstr.split(",")
+        if len(arglist) != 2:
+            print "plot command only accept two columns"
+            return
+        namelist = [arg.strip() for arg in arglist]
+
+        # query the result
+        sql = "select " + sql
+        result = self.database.query(sql)
+        
+        # plot it!
+        self.plot.plot(result, namelist)
+
+
     def do_compare(self, sql):
         fromIndex = sql.find("from")  # -1 = not found
         argstr = sql[0:fromIndex].strip()
@@ -94,12 +118,15 @@ Type "help" for more information.'''
         result = self.database.query(sql)
         
         # pass the result and arglist to plot
-        self.plot.comparePlot(result, namelist)
+        self.plot.bar(result, namelist)
 
 
     def do_help(self, path):
         print '''Help
 -------------------------------------------------------
+ls:      show all the tables in the database
+         ls
+
 show:    display a table quickly
          show [tablename]
         
