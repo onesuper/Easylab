@@ -3,9 +3,7 @@
 
 
 import sys
-sys.path.append(".")
-sys.path.append("..")
-import easylab
+import easylab.easylab as easylab
 from math import sqrt
 
 # read argumeny
@@ -23,8 +21,11 @@ r = int(((1+sqrt(5))/2)**N/sqrt(5))
 
 e.end()
 
+
 # log it
-e.log(N=N, time=e.getElapsedTime())
+logstr = "N=%d, time=%f" % (N ,e.getElapsedTime())
+e.log(logstr)
+
 
 print e.timeStr()
 print r

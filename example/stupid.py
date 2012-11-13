@@ -3,8 +3,7 @@
 
 
 import sys
-sys.path.append(".")
-import easylab
+import easylab.easylab as e
 
 
 #read the arguments
@@ -38,4 +37,7 @@ e.end()
 print e.timeStr()
 
 # log data
-e.log(var1=var1, var2=var2, var3=var3, time=e.getElapsedTime())
+logstr = "var1=%d, var2=%d, var3=%d, time=%f" % (var1, var2, var3,
+                                                 e.getElapsedTime())
+e.log(logstr)
+

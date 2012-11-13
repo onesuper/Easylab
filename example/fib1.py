@@ -3,9 +3,7 @@
 
 
 import sys
-sys.path.append(".")
-sys.path.append("..")
-import easylab
+import easylab.easylab as e
 
 
 # read argumeny
@@ -25,7 +23,8 @@ for i in range(N):
 e.end()
 
 # log it
-e.log(N=N, time=e.getElapsedTime())
+logstr = "N=%d, time=%f" % (N ,e.getElapsedTime())
+e.log(logstr)
 
 print e.timeStr()
 print a

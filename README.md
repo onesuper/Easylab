@@ -6,6 +6,13 @@
 Easylab is a simple, convenient tool to make the 'lab' easier. It captures the results as well as the arguments of a program, stores them in a database, and visualizes them with a simple, SQL-style query.
 
 
+## Install
+
+Install from source:
+
+    python setup.py install
+
+
 
 ## Getting Started
 
