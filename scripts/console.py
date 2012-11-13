@@ -6,9 +6,11 @@ import cmd
 import sys
 import os
 import subprocess
-import easylab_db as db
-import easylab_autorun as autorun
-import easylab_plot as plot
+import easylab.db as db
+import easylab.autorun as autorun
+import easylab.plot as plot
+
+
 
 
 
@@ -28,7 +30,8 @@ Type "help" for more information.'''
         cmd.Cmd.__init__(self)
         self.database = db.EasylabDB()
         self.plot = plot.EasylabPlot()
-   
+        
+
     def emptyline(self):
         '''if the input is an empty line'''
         return
@@ -44,7 +47,19 @@ Type "help" for more information.'''
     def do_run(self, argvstr):
         argv = argvstr.split()
         try:
-            subprocess.call(argv)
+            # read the data  from the subprocess's stdout
+            p = subprocess.Popen(argv, stderr=subprocess.PIPE)
+
+            # the format of data from std.err looks like:
+            # tablename\n
+            # {'key': value } 
+            data  = p.communicate()[1]
+            datav = data.split("\n")
+            if len(datav) == 2:
+                tablename = datav[0]
+                attrstr = datav[1]
+                attr =  autorun.stringToDict(attrstr)
+                self.database.insertOrCreateTable(tablename, attr)
         except OSError, e:
             print e
 
@@ -56,7 +71,14 @@ Type "help" for more information.'''
             # run these argvs
             try:
                 for argv in many_argvs:
-                    subprocess.call(argv)
+                    p = subprocess.Popen(argv, stderr=subprocess.PIPE)
+                    data = p.communicate()[1]
+                    datav = data.split("\n")
+                    if len(datav) == 2:
+                        tablename = datav[0]
+                        attrstr = datav[1]
+                        attr =  autorun.stringToDict(attrstr)
+                        self.database.insertOrCreateTable(tablename, attr)
             except OSError, e:
                 print e
         else:
@@ -158,6 +180,17 @@ Type "help" for more information.'''
         self.plot.bar(result, namelist)
 
 
+    def do_set(self, argstr):
+        argv = argstr.split()
+        if len(argv) != 2:
+            print "the command looks like: set title good_name"
+            return 
+        self.plot.setEnv(argv[0], argv[1])
+
+
+    def do_env(self, argstr):
+        self.plot.list()
+
     def do_help(self, path):
         print '''Help
 -------------------------------------------------------
@@ -182,6 +215,12 @@ select:  query a table
 
 compare: plot to compare data
          compare a,b from [tablename] where c=1:  
+
+env:     list all the environments
+         env
+
+set:     set an envrionment
+         set title name
 
 exit:    Goodbye My Lover
          exit
