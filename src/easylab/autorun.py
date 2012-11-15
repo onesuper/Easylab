@@ -1,4 +1,7 @@
+# Easylab
+# onesuper
 # Filename: easylab_autorun.py
+# Under Mit License
 
 import re
 
@@ -64,6 +67,8 @@ def listGen5(fat_argv):
 
 
 def stringToDict(string):
+    if string == "":
+        return {}
     strlist = string.split(",")
     strlist = [s.strip() for s in strlist]
     dictstring = "{"

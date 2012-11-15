@@ -16,8 +16,8 @@ var2 = int(sys.argv[2])
 var3 = int(sys.argv[3])
 
 # get a easylab and start timer
-e = easylab.Easylab("stupid")
-e.start()
+easylab = e.Easylab("stupid")
+easylab.start()
 
 
 #really stupid main body
@@ -33,11 +33,11 @@ for i in range(var3):
 
 
 # end timer and show time
-e.end()
-print e.timeStr()
+easylab.end()
+print easylab.timeStr()
 
 # log data
 logstr = "var1=%d, var2=%d, var3=%d, time=%f" % (var1, var2, var3,
-                                                 e.getElapsedTime())
-e.log(logstr)
+                                                 easylab.getElapsedTime())
+easylab.log(logstr)
 

@@ -12,8 +12,8 @@ if len(sys.argv ) < 2:
     sys.exit(1)
 N = int(sys.argv[1])
 
-e = easylab.Easylab("fib2")
-e.start()
+easylab = e.Easylab("fib2")
+easylab.start()
 
 # go
 def fibonacci(n):
@@ -21,11 +21,11 @@ def fibonacci(n):
 
 r = fibonacci(N)
 
-e.end()
+easylab.end()
 
 # log it
-logstr = "N=%d, time=%f" % (N ,e.getElapsedTime())
-e.log(logstr)
+logstr = "N=%d, time=%f" % (N, easylab.getElapsedTime())
+easylab.log(logstr)
 
 
 print e.timeStr()

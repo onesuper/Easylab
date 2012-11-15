@@ -2,20 +2,19 @@
 # Filename: test_plots.py
 
 import sys
-sys.path.append("..")
-sys.path.append(".")
-import easylab_plot as plt
+sys.path.append("./src/easylab")
+import plot as plt
 
 
 plot = plt.EasylabPlot()
 
 
-a = [[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-     [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
-     [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
-     [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
-     [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]]
-b = ["N", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"]
+a = [[1, 2, 3, 4, 5],
+     [2, 4, 6, 8, 10],
+     [3, 6, 9, 12, 15],
+     [4, 8, 12, 16, 20],
+     [5, 10, 15, 20, 25]]
+b = ["N", "a", "b", "c", "d"]
 
 
 plot.plots(a, "x", "y", b)

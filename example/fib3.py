@@ -3,7 +3,7 @@
 
 
 import sys
-import easylab.easylab as easylab
+import easylab.easylab as e
 from math import sqrt
 
 # read argumeny
@@ -12,21 +12,21 @@ if len(sys.argv ) < 2:
     sys.exit(1)
 N = int(sys.argv[1])
 
-e = easylab.Easylab("fib3")
-e.start()
+easylab = e.Easylab("fib3")
+easylab.start()
 
 # go
 
 r = int(((1+sqrt(5))/2)**N/sqrt(5))
 
-e.end()
+easylab.end()
 
 
 # log it
-logstr = "N=%d, time=%f" % (N ,e.getElapsedTime())
-e.log(logstr)
+logstr = "N=%d, time=%f" % (N ,easylab.getElapsedTime())
+easylab.log(logstr)
 
 
-print e.timeStr()
+print easylab.timeStr()
 print r
 

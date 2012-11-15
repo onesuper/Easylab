@@ -1,5 +1,7 @@
+# Easylab
+# Author: onesuper
 # Filename: easylab.py
-
+# Under MIT License
 
 version = '0.1'
 

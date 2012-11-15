@@ -12,19 +12,19 @@ if len(sys.argv ) < 2:
     sys.exit(1)
 N = int(sys.argv[1])
 
-e = easylab.Easylab("fib1")
-e.start()
+easylab = e.Easylab("fib1")
+easylab.start()
 
 # go
 a, b = 0, 1
 for i in range(N):
     a,b = b, a+b
 
-e.end()
+easylab.end()
 
 # log it
-logstr = "N=%d, time=%f" % (N ,e.getElapsedTime())
-e.log(logstr)
+logstr = "N=%d, time=%f" % (N, easylab.getElapsedTime())
+easylab.log(logstr)
 
 print e.timeStr()
 print a

@@ -16,7 +16,7 @@ import easylab.plot as plot
 
 class Shell(cmd.Cmd):
     intro = '''=============================================
-easylab 0.1.0
+easylab 0.2.0
 Type "help" for more information.'''
     
     doc_header = "Type <command> to see the instruction."
@@ -55,11 +55,14 @@ Type "help" for more information.'''
             # {'key': value } 
             data  = p.communicate()[1]
             datav = data.split("\n")
+            
             if len(datav) == 2:
                 tablename = datav[0]
                 attrstr = datav[1]
                 attr =  autorun.stringToDict(attrstr)
                 self.database.insertOrCreateTable(tablename, attr)
+                
+                
         except OSError, e:
             print e
 
@@ -74,6 +77,7 @@ Type "help" for more information.'''
                     p = subprocess.Popen(argv, stderr=subprocess.PIPE)
                     data = p.communicate()[1]
                     datav = data.split("\n")
+
                     if len(datav) == 2:
                         tablename = datav[0]
                         attrstr = datav[1]
@@ -154,13 +158,46 @@ Type "help" for more information.'''
             dotIndex = arglist[i].find(".")
             name = arglist[i][0: dotIndex]
             namelist.append(name.strip())
+  
+  
+        # query the result
+        sql = "select " + sql
+        result = self.database.query(sql)
+        
+        print result,namelist
+
+        # pass the result to plot
+        self.plot.plots(result, xlabel, ylabel, namelist)
+
+
+
+    def do_bars(self, sql):
+        fromIndex = sql.find("from") # -1 = not found
+        argstr = sql[0:fromIndex].strip()
+        arglist = argstr.split(",")
+        if len(arglist) <= 2:
+            print "bars command accept more than two columns"
+            return
+       
+        dotIndex = arglist[0].find(".")
+        xlabel = arglist[0][dotIndex+1:].strip()
+        dotIndex = arglist[1].find(".")
+        ylabel = arglist[1][dotIndex+1:].strip()
+        namelist = []
+        for i in range(1, len(arglist)):
+            dotIndex = arglist[i].find(".")
+            name = arglist[i][0: dotIndex]
+            namelist.append(name.strip())
     
         # query the result
         sql = "select " + sql
         result = self.database.query(sql)
 
         # pass the result to plot
-        self.plot.plots(result, xlabel, ylabel, namelist)
+        self.plot.bars(result, xlabel, ylabel, namelist)
+
+    
+    
 
 
     def do_compare(self, sql):
@@ -183,10 +220,12 @@ Type "help" for more information.'''
     def do_set(self, argstr):
         argv = argstr.split()
         if len(argv) != 2:
-            print "the command looks like: set title good_name"
+            print "command format: set title good_name"
             return 
         self.plot.setEnv(argv[0], argv[1])
 
+    def do_unset(self, name):
+        self.plot.unsetEnv(name)
 
     def do_env(self, argstr):
         self.plot.list()
@@ -221,6 +260,9 @@ env:     list all the environments
 
 set:     set an envrionment
          set title name
+
+unset:   unset an environment
+         unset title
 
 exit:    Goodbye My Lover
          exit

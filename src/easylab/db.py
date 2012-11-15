@@ -1,9 +1,11 @@
+# Easylab
+# Author: onesuper
 # Filename: easylab_db.py
-
+# Under MIT Licese
 
 """
 NOTE:
-
+The database will be installed on the HOME dir
 """
 
 
@@ -16,7 +18,7 @@ COLUMN_WIDTH = 12
 class EasylabDB():
 
     def __init__(self):
-        dbpath = os.environ["HOME"] + "/.esaylab"
+        dbpath = os.environ["HOME"] + "/.easylab"
         self.conn = sqlite3.connect(dbpath)
 
 

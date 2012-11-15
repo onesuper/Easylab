@@ -2,9 +2,8 @@
 # Filename: test_bar.py
 
 import sys
-sys.path.append("..")
-sys.path.append(".")
-import easylab_plot as plt
+sys.path.append("./src/easylab")
+import plot as plt
 
 
 plot = plt.EasylabPlot()
